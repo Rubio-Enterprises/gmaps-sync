@@ -16,3 +16,6 @@ Vagrantfile
 .worktrees/
 node_modules/
 dist/
+*.tgz
+*.tsbuildinfo
+.env

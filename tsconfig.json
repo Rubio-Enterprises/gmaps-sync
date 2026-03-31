@@ -1,0 +1,10 @@
+{
+  "files": [],
+  "references": [
+    { "path": "packages/core" },
+    { "path": "packages/sync" },
+    { "path": "packages/discovery" },
+    { "path": "packages/push" },
+    { "path": "packages/cli" }
+  ]
+}
