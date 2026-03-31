@@ -1,0 +1,13 @@
+{
+  "name": "@gmaps/cli",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "bin": { "places": "./dist/cli.js" },
+  "scripts": { "build": "tsc" },
+  "dependencies": {
+    "@gmaps/core": "workspace:*",
+    "@gmaps/sync": "workspace:*",
+    "commander": "^14.0.3"
+  }
+}
