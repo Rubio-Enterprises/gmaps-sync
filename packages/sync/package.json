@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@gmaps/core": "workspace:*",
+    "drizzle-orm": "^0.44.2",
     "playwright": "^1.58.2"
   }
 }

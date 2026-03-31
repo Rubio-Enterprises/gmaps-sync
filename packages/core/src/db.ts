@@ -1,9 +1,9 @@
-import Database from "better-sqlite3";
+import Database, { type Database as DatabaseType } from "better-sqlite3";
 import { createRequire } from "node:module";
 import { drizzle } from "drizzle-orm/better-sqlite3";
 import * as schema from "./schema.js";
 
-export function createDb(dbPath: string) {
+export function createDb(dbPath: string): { db: ReturnType<typeof drizzle<typeof schema>>; sqlite: DatabaseType } {
   const sqlite = new Database(dbPath);
   sqlite.pragma("journal_mode = WAL");
   sqlite.pragma("foreign_keys = ON");
@@ -12,7 +12,7 @@ export function createDb(dbPath: string) {
   return { db, sqlite };
 }
 
-export function loadVecExtension(sqlite: Database.Database): boolean {
+export function loadVecExtension(sqlite: DatabaseType): boolean {
   try {
     const require = createRequire(import.meta.url);
     const sqliteVec = require("sqlite-vec");
