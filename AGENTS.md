@@ -42,6 +42,7 @@ pnpm lint                    # tsc -b --noEmit (type checking only)
 ```
 
 Run a single test file:
+
 ```bash
 pnpm vitest run packages/sync/tests/parser.test.ts
 ```
