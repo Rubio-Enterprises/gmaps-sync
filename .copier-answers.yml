@@ -7,7 +7,7 @@ default_branch: main
 has_e2e: true
 is_fork: false
 is_mcp_server: false
-is_monorepo: false
+is_monorepo: true
 linter_floor: biome
 project_name: gmaps-sync
 tier: experimental
