@@ -1,12 +1,13 @@
 #!/usr/bin/env node
 
 import { mkdirSync } from "node:fs";
+import { dirname } from "node:path";
 import {
-  BASE_DIR,
   createDb,
   DB_PATH,
   lists,
   loadConfig,
+  migrateLegacyDir,
   pendingMutations,
   placeLists,
   places,
@@ -21,7 +22,8 @@ import { eq, isNull, sql } from "drizzle-orm";
 const JITTER_MINUTES = 60;
 
 function getDb() {
-  mkdirSync(BASE_DIR, { recursive: true });
+  migrateLegacyDir();
+  mkdirSync(dirname(DB_PATH), { recursive: true });
   const { db, sqlite } = createDb(DB_PATH);
   runMigrations(sqlite);
   return { db, sqlite };
@@ -36,7 +38,8 @@ program
   .description("Create DB, open headed browser for login")
   .action(async () => {
     try {
-      mkdirSync(BASE_DIR, { recursive: true });
+      migrateLegacyDir();
+      mkdirSync(dirname(DB_PATH), { recursive: true });
       const { sqlite } = createDb(DB_PATH);
       runMigrations(sqlite);
       sqlite.close();

@@ -1,6 +1,5 @@
-import { join } from "node:path";
 import type { AppConfig, Db, ParsedList, ParsedPlace } from "@gmaps/core";
-import { BASE_DIR, syncState } from "@gmaps/core";
+import { SNAPSHOTS_DIR, syncState } from "@gmaps/core";
 import { eq } from "drizzle-orm";
 import { applyDiff, type DiffResult } from "./diff.js";
 import { getSchemaVersion, parseLists, parsePlaces } from "./parser.js";
@@ -81,7 +80,7 @@ export async function pull(db: Db, config: AppConfig, options?: PullOptions): Pr
       return { success: false, error: "No session token", listsProcessed: 0, listsFailed: 0 };
     }
 
-    const snapshotsDir = join(BASE_DIR, "snapshots");
+    const snapshotsDir = SNAPSHOTS_DIR;
     let remoteLists: ParsedList[] = [];
     if (masRaw) {
       try {
