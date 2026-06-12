@@ -22,7 +22,7 @@
     "sqlite-vec": "^0.1.6"
   },
   "devDependencies": {
-    "@types/better-sqlite3": "^7.6.13",
-    "drizzle-kit": "^0.31.1"
+    "@types/better-sqlite3": "7.6.13",
+    "drizzle-kit": "0.31.10"
   }
 }
