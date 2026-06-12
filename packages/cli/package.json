@@ -15,7 +15,7 @@
   "dependencies": {
     "@gmaps/core": "workspace:*",
     "@gmaps/sync": "workspace:*",
-    "commander": "^14.0.3",
+    "commander": "^15.0.0",
     "drizzle-orm": "^0.44.2"
   }
 }
