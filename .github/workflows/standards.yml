@@ -84,6 +84,56 @@ jobs:
     # would otherwise hit first. PR-only; push/schedule paths skip.
     if: github.event_name == 'pull_request' && github.event.action != 'edited'
     uses: Rubio-Enterprises/.github/.github/workflows/lint-hooks.yml@266c2d8aa76cf9572a0b501650925518e2bc66ba # v1
+
+  typecheck:
+    # Strict TypeScript type-check gate (§ type-checking — the TS/astro floor).
+    # The python floor rides the lint-hooks job via the pyright lefthook hook;
+    # tsc/astro-check are project-wide + slow (whole-program analysis, not a
+    # per-file staged subset) so they belong in a dedicated rendered job here
+    # rather than a pre-commit hook. This is an INLINE job (not a reusable
+    # workflow) so the python-floor change requires ZERO `.github` edits — only
+    # the TS half lands a new job, and it lives wholly in template-managed
+    # standards.yml so there's no reusable-workflow SHA bump to coordinate.
+    #
+    # Tool selection is CONFIG-PRESENCE-driven at runtime, not archetype-driven:
+    # `astro.config.mjs|ts` present → `astro check` (astro projects need the
+    # astro language server — bare tsc misses .astro components); otherwise
+    # `npm run typecheck` (scripts.typecheck := `tsc --noEmit`, ensured by the
+    # ensure-pkg-typecheck-script.sh _tasks hook + required by
+    # package-json.schema.json for ts-* archetypes). Detection is at CI time
+    # because copier.yml has no astro archetype — astro is only ever an
+    # astro.config.* present in a ts-web repo (see _skip_if_exists).
+    if: github.event_name == 'pull_request' && github.event.action != 'edited'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v6
+      - uses: jdx/mise-action@v4
+      - name: Install JS deps
+        # Type-checking needs node_modules (typescript, @types/*, astro). mise
+        # installs the toolchain but not the workspace; mirror lint-hooks.yml's
+        # install shape so pnpm/npm consumers both resolve.
+        env:
+          MISE_ENV: ci
+        run: |
+          if [ -f pnpm-lock.yaml ]; then
+            mise exec -- corepack enable
+            mise exec -- pnpm install --frozen-lockfile
+          else
+            mise exec -- npm ci
+          fi
+        shell: bash
+      - name: Type-check (astro check / tsc --noEmit)
+        env:
+          MISE_ENV: ci
+        run: |
+          if [ -f astro.config.mjs ] || [ -f astro.config.ts ]; then
+            mise exec -- npx --no-install astro check
+          else
+            mise exec -- npm run typecheck
+          fi
+        shell: bash
   copier-sync:
     # Weekly + manual: detect drift between this repo's rendered template state
     # and the latest `template/v1` release, then open a PR with the rendered

@@ -62,6 +62,10 @@
 description = "Delegates to scripts.lint in package.json"
 run = ["npm run lint"]
 
+[tasks.typecheck]
+description = "Delegates to scripts.typecheck in package.json"
+run = ["npm run typecheck"]
+
 [tasks.test]
 description = "Delegates to scripts.test in package.json"
 run = ["npm run test"]
